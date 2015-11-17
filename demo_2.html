@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>SVG画图板</title>
+		<style type="text/css">
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			.container{
+				width: 100%;
+				height: 800px;
+			}
+			.left{
+				box-sizing: border-box;
+				border: 1px solid #CCCCCC;
+				width: 30%;
+				float: left;
+				height: 800px;
+			}
+			.right{
+				width: 70%;
+				float: right;
+				box-sizing: border-box;
+				padding: 10px;
+				height: 100%;
+			}
+			.draw{
+				width: 100%;
+				height: 100%;
+				border: 1px solid #CCCC77;
+				box-shadow: 5px 5px 10px 1px #002409;
+				border-radius: 5px;
+			}
+			p{
+				font-size: 30px;
+				background: #CCCCCC;
+				height: 40px;
+				line-height: 40px;
+			}
+			.parameter{
+				height: 100px;
+			}
+			.elem{
+				text-align: center;
+				font-size: 0;
+			}
+			.elem li{
+				height: 50px;
+				line-height: 50px;
+				box-sizing: border-box;
+				width: 25%;
+				display: inline-block;
+			}
+			.elem li a{
+				text-decoration: none;
+				color: #006DB6;
+				font-size: 20px;
+				border: 1px solid #CCCCCC;
+				padding: 5px;
+				border-radius: 5px;
+				box-shadow: 3px 3px 5px 1px #CCCCCC;
+			}
+			.elem li a:hover{
+				color: #CCCC77;
+			}
+			.transform dl {
+				height: 50px;
+				line-height: 50px;
+			}
+			.transform dl dt{
+				float: left;
+				width: 25%;
+				text-align: right;
+			}
+			.transform dl dd input{
+				vertical-align: middle;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="left">
+				<p>创建图形</p>
+				<ul class="box_sun elem">
+					<li><a href="javascript:;" data-num="1">Rect</a></li>
+					<li><a href="javascript:;" data-num="2">Circle</a></li>
+					<li><a href="javascript:;" data-num="3">Ellipse</a></li>
+					<li><a href="javascript:;" data-num="4">Line</a></li>
+				</ul>
+				<p>图形参数</p>
+				<div class="parameter box_sun">
+		
+				</div>
+				<p>颜色和变换</p>
+				<div class="transform box_sun">
+					<dl>
+						<dt>填充：</dt>
+						<dd>
+							<input type="color" id="fillColor">
+						</dd>
+						<dt>描边：</dt>
+						<dd>
+							<input type="color" id="strokeColor">
+							<input type="range" name="" id="" value="1" min="0" max="10" />
+						</dd>
+					</dl>
+				</div>
+			</div>
+			<div class="right">
+				<div class="draw">
+					<svg width="100%" height="100%" id="svg"></svg>
+				</div>
+			</div>
+		
+		</div>
+	</body>
+	<script src="js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/snap.svg-min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		$(function(){
+			//定义选择的图形，一开始的时候为空；
+			var selector=null;
+			//定义svg对象
+			var svg=Snap("#svg");
+			//创建矩阵
+			var myMatrix = new Snap.Matrix();
+			//颜色变化时，图形填充和描边响应的跟着变化
+			$("#strokeColor").change(function(){
+				var strokeColor=$("#strokeColor").val();
+				//console.log(strokeColor);
+				if(selector){
+					//console.log(selector);
+					selector.animate({
+						stroke:strokeColor,
+					},0)//和jq的animate不太一样，这个时间必须写，就算是0也不能不写
+				}else{
+					alert("请点击选择图形，在进行填充或描边")
+				}
+			})
+			$("#fillColor").change(function(){
+				var fillColor=$("#fillColor").val();
+				if(selector){
+					selector.animate({
+						fill:fillColor,
+					},0)//和jq的animate不太一样，这个时间必须写，就算是0也不能不写
+				}else{
+					alert("请点击选择图形，在进行填充或描边")
+				}
+			})
+			//X轴range变化时
+//			$("#rangeX,#rangeY").change(function(){
+//				var rangeX=$("#rangeX").val();
+//				var rangeY=$("#rangeY").val();
+//				//var translateX
+//				console.log(rangeX);
+//				if(selector){
+////					selector.animate({
+////						transform:"t"+rangeX+","+rangeY//这种方法也是对的
+////					},0)
+//					myMatrix.translate(rangeX,0);
+//					selector.transform(myMatrix);
+//				}	
+//			})
+			//console.log(svg);
+			$(".elem").find("a").click(function(e){
+				//点击时鼠标坐标
+				var con=$(this).attr("data-num");
+				//console.log(con);
+				switch (con){
+					case '1':
+						//console.log("1");
+						createRect(350,300,300,200);
+						break;
+					case '2':
+						//console.log("2");
+						createCircle(500,400,60);
+						break;
+					case '3':
+						//console.log("3");
+						createEllipse(500,400,100,50);
+						break;
+					case '4':
+						//console.log("4");
+						createLine(440,340,560,460)
+						break;	
+					default:
+						break;
+				}
+			})
+			//圆形
+			function createCircle(x,y,r){
+				svg.paper.circle(x,y,r).attr({
+					fill:"transparent",
+					stroke:"#000",
+					strokeWidth:2
+				}).click(function(){
+					selector=this;//snap对象；
+				}).drag()
+			}
+			//方形
+			function createRect(cx,cy,x,y){
+				svg.paper.rect(cx,cy,x,y).attr({
+					fill:"transparent",
+					stroke:"#000",
+					strokeWidth:2
+				}).click(function(){
+					selector=this;
+				}).drag()
+			}
+			//椭圆
+			function createEllipse(x,y,cx,cy){
+				svg.paper.ellipse(x,y,cx,cy).attr({
+					fill:"transparent",
+					stroke:"#000",
+					strokeWidth:2
+				}).click(function(){
+					selector=this;
+				}).drag()
+			}
+			//线条
+			function createLine(x0,y0,x1,y1){
+				svg.paper.line(x0,y0,x1,y1).attr({
+					fill:"transparent",
+					stroke:"#000",
+					strokeWidth:2
+				}).click(function(){
+					selector=this;
+				}).drag()
+			}
+		})
+	</script>
+</html>

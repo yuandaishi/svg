@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<svg width="100%" height="500">
+			<circle cx="100" cy="100" r="90" style="fill:pink;fill-opacity: .5;"/>
+			<rect x="100" y="250" width="250" height="100" rx="30" ry="30" fill="#cccccc" />
+			<ellipse cx="300" cy="100" rx="250" ry="50" style="fill:orange;fill-opacity: .4; transform: rotateY(60deg);" />
+			<line x1="70" y1="70" x2="100" y2="130" style="stroke:green;stroke-width:2;"/>
+			<polygon points="500 50 90 190 150 150" style="stroke: blue;stroke-width: 2;" fill="purple"/>
+		</svg>
+		<canvas id="canvas" width="1000" height="500"></canvas>
+	</body>
+	<script src="js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		$(function(){
+			var canvas=document.querySelector("#canvas");
+			var ctx=canvas.getContext("2d");
+				ctx.beginPath(); 
+				ctx.arc(150,150,100,0,2*Math.PI,false);
+				ctx.fillStyle="rgba(0,0,0,.5)";
+				ctx.fill();
+				ctx.beginPath(); 
+				ctx.translate(100,100);
+				ctx.rotate(30*Math.PI/180);
+				ctx.rect(0,0,200,200);
+				ctx.fillStyle="rgba(180,26,150,.3)";
+				ctx.fill();
+		})
+	</script>
+</html>
