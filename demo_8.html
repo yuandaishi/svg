@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>svg文本</title>
+		<style type="text/css">
+			*{
+				margin: 0;
+				padding: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<svg width="100%" height="800">
+			<defs>
+				<pattern id="p1" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+					<rect  x="0" y="0" width="100" height="100" style="stroke:#333;stroke-width: .5px;fill: #fff;"/>
+				</pattern>
+			</defs>
+			<rect width="100%" height="100%" style="fill:url(#p1)"/>
+			<text x="100" y="400" dx="20 20 20 20 20" dy="20 20 20 20 20" style="font-size: 16px;" id="text_yuan">ABCDEFGHIJKLMNOPQRSTUVWXYZ</text>
+			<line x1="100" y1="100" x2="100" y2="500" style="stroke-width: 2px;stroke: red;"/>
+			<line x1="0" y1="400" x2="400" y2="400" style="stroke-width: 2px;stroke: red;"/>
+		</svg>
+	</body>
+	<script src="js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/snap.svg-min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		$(function() {
+			//Asin(ωx+φ)+k,此为正弦曲线函数
+			var svg = document.querySelector("#svg");
+			var text_val = $("#text_yuan").html();
+			var text_len = text_val.length;
+			var add = 20;
+			var arr_x = [];
+			var arr_y = [];
+			var a = 100;
+			var b = 0.02;
+			var c = 0;
+			var k = 0;
+			//定义绘制函数
+			function draw() {
+				var star_x = 0;
+				var star_y = 0;
+				var ly=0;
+				for (var i = 0; i < text_len; i++) {
+					star_x += add;
+					star_y = -a * Math.sin(b * star_x + c) + k;
+					arr_y.push(star_y-ly);
+					arr_x.push(add);
+					ly=star_y;
+					//console.log(arr);
+				}
+				c+=0.02;
+				var arrToString_y = arr_y.join(" ");
+				var arrToString_x = arr_x.join(" ");
+				//数组置空
+				arr_x = [];
+				arr_y = [];
+//				console.log(arrToString_y);
+				//console.log(b);
+				//console.log(arrToString_y);
+				$("#text_yuan").attr("dx", arrToString_x);
+				$("#text_yuan").attr("dy", arrToString_y);
+				window.requestAnimationFrame(draw, svg);
+			}
+			draw();
+		})
+	</script>
+	
+</html>

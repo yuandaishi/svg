@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>defs标签</title>
+	</head>
+	<body>
+		<svg width="100%" height="800">
+			<!--<defs id="coord">-->
+				<g>
+					<circle cx="200" cy="200" r="50" style="fill:#ccc;stroke:#333;stroke-width: 2px;"></circle>
+					<ellipse cx="300" cy="300" rx="80" ry="90" style="fill:rgba(50,50,50,.5); transform: rotate(30deg);"><ellipse>
+				</g> 
+			<!--</defs>-->
+			<use xlink:href="#coord" />
+		</svg>
+	</body>
+</html>

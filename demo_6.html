@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>svg渐变</title>
+	</head>
+	<body>
+		<p>线性填充：SVG的填充范围是以百分比来限定的，而canvas的填充范围是以坐标来限定的（可以通过gradientUnits这一属性改变）</p>
+		<p>放射性填充：和canvas差别较大</p>
+		<svg width="100%" height="1000" id="svg">
+			<defs>
+				<linearGradient id="linear" x1="0" y1="0" x2="0" y2="1">
+					<stop offset="0" stop-color="#1497FC"/>
+					<stop offset=".5" stop-color="#A469BE"/>
+					<stop offset="1" stop-color="#FF8C00">
+				</linearGradient>
+				<radialGradient id="radial" cx="0.5" cy="0.5" r="0.5" fx=".7" fy=".7">
+					<stop offset="0" stop-color="#1497FC"/>
+					<stop offset=".5" stop-color="#A469BE"/>
+					<stop offset="1" stop-color="#FF8C00" />
+				</radialGradient>
+				<pattern id="p1" x="0" y="0" width="0.5" height="0.5">
+					<circle cx="100" cy="50" r="50" style="stroke-width: 1px; stroke: #ccc;"/>
+					<ellipse cx="15" cy="15" rx="15" ry="9" style="stroke: #ccc;stroke-width: 2px;"/>
+				</pattern>
+			</defs>
+			<rect x="200" y="0" width="200" height="300" style="fill:url(#linear)"></rect>
+			<circle cx="550" cy="100" r="100" style="fill:url(#radial)"/>
+			<ellipse cx="500" cy="500" rx="500" ry="300" style="fill: url(#p1);stroke: blue;"/>
+		</svg>
+		<canvas width="1000" height="500" id="canvas"></canvas>
+	</body>
+	<script src="js/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/snap.svg-min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		$(function(){
+			var canvas=document.querySelector("#canvas");
+			var ctx=canvas.getContext("2d");
+			ctx.arc(100,100,100,0,Math.PI*2,true);
+			fillstyle=ctx.createRadialGradient(100,100,0,100,100,100);
+			fillstyle.addColorStop(0,"#ccc");
+			fillstyle.addColorStop(1,"#333");
+			ctx.fillStyle=fillstyle;
+			ctx.fill();
+			ctx.beginPath();
+			ctx.arc(400,100,100,0,Math.PI*2,true);
+			fillstyle=ctx.createLinearGradient(300,0,500,200);
+			fillstyle.addColorStop(0,"#ccc");
+			fillstyle.addColorStop(1,"#333");
+			ctx.fillStyle=fillstyle;
+			ctx.fill();
+		})
+	</script>
+</html>
